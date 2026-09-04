@@ -15,3 +15,4 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - The primary planning surface is a reusable two-week cycle labeled Week A and Week B. Do not add exact calendar dates.
 - Preserve the core line: “Reset better. Miss less. Attack smarter. Stay patient.”
 - Keep GitHub Pages unpublished until the user has reviewed and approved the local static site.
+- In the two-hour ball-machine guide, prioritize drives, resets, counters, forehand/backhand rolls, and backhand flicks; keep overhead and out-ball judgment work in partner sessions.

@@ -51,7 +51,7 @@ const weekA = [
     day: "Thu",
     title: "Ball machine",
     duration: "2 hours",
-    detail: "Drives · resets · counters",
+    detail: "Drives · resets · rolls",
     featured: true,
     icon: TennisBall,
   },
@@ -97,9 +97,9 @@ const machineBlocks = [
   ["Backhand drives", "20 min", "Spacing, shape and repeatability"],
   ["Transition resets", "25 min", "Backhand bias; give soft balls lift"],
   ["Counters", "15 min", "Paddle up, compact and in front"],
-  ["Left-side dink package", "10 min", "Slice, topspin and volley dink"],
-  ["Overheads + out balls", "10 min", "Control first; call out early"],
-  ["Pressure test", "10 min", "Finish with a scored standard"],
+  ["Forehand + backhand rolls", "15 min", "Topspin shape from attackable feeds"],
+  ["Backhand flicks", "10 min", "Compact acceleration with disguise"],
+  ["Pressure test", "5 min", "Finish with a scored standard"],
 ];
 
 const priorityGuides = [
@@ -321,7 +321,10 @@ function DrillsSection() {
         </ol>
         <div className="serve-note">
           <Crosshair size={26} weight="duotone" aria-hidden="true" />
-          <div><strong>Serve work lives outside the machine clock.</strong><span>Add 10–15 focused minutes on three court days: form, depth, then power.</span></div>
+          <div>
+            <strong>Serve work lives outside the machine clock.</strong>
+            <span>Add 10–15 focused minutes on three court days: form, depth, then power. Save overheads and out-ball judgment for partner feeds.</span>
+          </div>
         </div>
       </article>
 
