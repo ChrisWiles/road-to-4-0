@@ -316,9 +316,6 @@ function PlanSection() {
           <p className="eyebrow">Coach’s notebook</p>
           <h1>Reset better. Miss less.<br />Attack smarter. Stay patient.</h1>
         </div>
-        <figure className="hero__image">
-          <img src="./assets/pickleball-action.png" alt="Pickleball player preparing a controlled volley at the kitchen" />
-        </figure>
       </div>
 
       <div className="plan-layout" id="cycle">

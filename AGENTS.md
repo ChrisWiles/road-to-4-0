@@ -18,3 +18,4 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - In the two-hour ball-machine guide, prioritize drives, resets, counters, forehand/backhand rolls, and backhand flicks; keep overhead and out-ball judgment work in partner sessions.
 - Keep the drill area organized as three clearly separated recipes: a repeatable two-hour standard partner session, a 90–120 minute focused shot-development session, and a two-hour ball-machine session, followed by a distinct drill library.
 - Keep the phone layout free of horizontal page scrolling. At small widths, render each training week as a readable two-column grid, preserve large touch targets, and keep anchor headings clear of the sticky header.
+- Keep the opening hero text-only; do not restore a lead image unless the user explicitly requests one.
