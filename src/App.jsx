@@ -102,10 +102,57 @@ const machineBlocks = [
   ["Pressure test", "5 min", "Finish with a scored standard"],
 ];
 
+const standardPartnerBlocks = [
+  ["Cooperative warm-up", "10 min", "Straight-on dinks, soft hands and clean contact"],
+  ["Straight-on dinking", "15 min", "Depth, inside-foot targets and 10-ball patience"],
+  ["Crosscourt dinking", "15 min", "Both diagonals; move the ball without forcing"],
+  ["Forehand kitchen work", "15 min", "Punch volleys, rolls and controlled putaways"],
+  ["Third-shot drive + drop", "25 min", "Read the third, then play the fifth and seventh"],
+  ["7/11", "25 min", "Baseline earns the kitchen; kitchen keeps them back"],
+  ["Pressure finish", "15 min", "Skinny singles or constrained points starting at 8–8"],
+];
+
+const focusBlocks = [
+  ["Choose + baseline", "10 min", "Pick one primary shot and score the first 10 reps"],
+  ["Primary mechanics", "35 min", "Controlled feeds, one cue and generous targets"],
+  ["Supporting variation", "20 min", "Add one adjacent shot—not five new ideas"],
+  ["Pattern integration", "25 min", "Use the shot inside a realistic three-ball sequence"],
+  ["Pressure test", "20 min", "Score it and make the final reps matter"],
+  ["Log the next cue", "10 min", "Record the result, miss pattern and next-session focus"],
+];
+
+const practiceFormats = [
+  {
+    label: "Format 01",
+    title: "Standard partner session",
+    duration: "120 min",
+    body: "A balanced weekly tune-up for dinks, thirds, transition and pressure.",
+    href: "#standard-partner",
+    icon: UsersThree,
+  },
+  {
+    label: "Format 02",
+    title: "Focused shot session",
+    duration: "90–120 min",
+    body: "One weakness from coaching or film, taken from mechanics into live play.",
+    href: "#focus-session",
+    icon: Crosshair,
+  },
+  {
+    label: "Format 03",
+    title: "Ball-machine session",
+    duration: "120 min",
+    body: "Solo repetition for the predictable feeds the machine handles well.",
+    href: "#ball-machine",
+    icon: TennisBall,
+  },
+];
+
 const priorityGuides = [
   {
     number: "01",
     title: "Transition + resets",
+    format: "Partner · machine",
     cue: "Neutral is a win.",
     body: "Build from uncomfortable positions without panicking. Split, reset, advance and repeat. On softer feeds, add enough lift instead of babying the ball into the net.",
     test: "Score how often a transition attempt produces neutrality or forward progress.",
@@ -113,6 +160,7 @@ const priorityGuides = [
   {
     number: "02",
     title: "Serve + drives",
+    format: "Solo · machine",
     cue: "Shape first. Power second.",
     body: "Build proper serve form and dependable forehand and backhand drives. Use 70–80% power, topspin, generous targets and balanced recovery.",
     test: "Serve: 95% in and 80% deep. Drives: track target success at sustainable pace.",
@@ -120,6 +168,7 @@ const priorityGuides = [
   {
     number: "03",
     title: "Paddle + counters",
+    format: "Partner · machine",
     cue: "Up. Backhand-ready. In front.",
     body: "Return to a backhand-biased ready position after every contact. Train compact counters to the right hip, chest and left shoulder with random placement.",
     test: "Count clean neutral or offensive contacts before the first paddle-position breakdown.",
@@ -127,6 +176,7 @@ const priorityGuides = [
   {
     number: "04",
     title: "Third-shot movement",
+    format: "Partner pattern",
     cue: "The third decides the feet.",
     body: "Classify every third as good, neutral or bad. Advance on quality, hold on marginal balls, and stop or retreat with your partner behind a high third.",
     test: "On video, tag movement decisions separately from shot-execution errors.",
@@ -134,6 +184,7 @@ const priorityGuides = [
   {
     number: "05",
     title: "Keep them back",
+    format: "Partner · scored",
     cue: "Attack the player coming forward.",
     body: "When your team owns the kitchen, prioritize feet, depth and the advancing player. Make opponents earn every step through transition.",
     test: "Play 7/11 and track how often the baseline team reaches the kitchen cleanly.",
@@ -141,9 +192,26 @@ const priorityGuides = [
   {
     number: "06",
     title: "Patience + attack choice",
+    format: "Partner · scored",
     cue: "Earn the speedup.",
     body: "Classify green, yellow and red balls. A red-ball attack loses the drill rally even when it happens to win the point.",
     test: "Track bad decisions per game and attacks attempted from below net height.",
+  },
+  {
+    number: "07",
+    title: "Left-side dink package",
+    format: "Partner",
+    cue: "Create pressure without rushing.",
+    body: "Build the crosscourt backhand slice first, then the two-handed topspin dink and balls taken out of the air. Follow a crosscourt dink by looking for a legitimate roll, flick or punch.",
+    test: "Complete 10-ball cooperative rallies, then score target accuracy and attack decisions separately.",
+  },
+  {
+    number: "08",
+    title: "Overheads + out balls",
+    format: "Partner",
+    cue: "Control first. Judge early.",
+    body: "For overheads, turn sideways, contact high and recover for the next ball. For out-ball judgment, mix clearly in, borderline and clearly out feeds; call the ball before it passes.",
+    test: "Make 9 of 10 controlled overheads. Count every out ball touched as a lost drill point.",
   },
 ];
 
@@ -293,47 +361,115 @@ function PlanSection() {
   );
 }
 
+function DrillSessionGuide({ id, eyebrow, title, description, icon: Icon, blocks, duration, note, variant = "" }) {
+  return (
+    <article className={`session-guide ${variant ? `session-guide--${variant}` : ""}`} id={id}>
+      <div className="session-guide__intro">
+        <div className="icon-frame"><Icon size={34} weight="duotone" aria-hidden="true" /></div>
+        <p className="eyebrow">{eyebrow}</p>
+        <h3>{title}</h3>
+        <p>{description}</p>
+        <div className="session-total"><span>{blocks.length} blocks</span><strong>{duration}</strong></div>
+      </div>
+      <ol className="session-blocks">
+        {blocks.map(([blockTitle, time, body], index) => (
+          <li key={blockTitle}>
+            <span className="block-number">{String(index + 1).padStart(2, "0")}</span>
+            <div><strong>{blockTitle}</strong><small>{body}</small></div>
+            <span className="block-time">{time}</span>
+          </li>
+        ))}
+      </ol>
+      {note ? (
+        <div className="session-note">
+          <Crosshair size={26} weight="duotone" aria-hidden="true" />
+          <div><strong>{note.title}</strong><span>{note.body}</span></div>
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
 function DrillsSection() {
   return (
     <section id="drills" className="content-section drills-section">
       <div className="section-heading">
         <p className="eyebrow">Drill guides</p>
-        <h2>Foundation before flash.</h2>
-        <p>Build the shots and decisions that survive a nervous day. Advanced weapons stay in the parking lot until the foundation is dependable.</p>
+        <h2>Know the session before you step on court.</h2>
+        <p>Choose one complete recipe. The standard session keeps the whole game healthy, the focus session attacks one weakness, and the ball machine supplies clean solo repetition.</p>
       </div>
 
-      <article className="machine-guide" id="ball-machine">
-        <div className="machine-guide__intro">
-          <div className="icon-frame"><TennisBall size={34} weight="duotone" aria-hidden="true" /></div>
-          <p className="eyebrow">Weekly technical session</p>
-          <h3>Two-hour ball-machine guide</h3>
-          <p>Use clean, repeatable feeds to build mechanics. Add movement and randomness only after contact quality holds.</p>
-          <div className="machine-total"><span>8 blocks</span><strong>120 minutes</strong></div>
-        </div>
-        <ol className="machine-blocks">
-          {machineBlocks.map(([title, time, body], index) => (
-            <li key={title}>
-              <span className="block-number">{String(index + 1).padStart(2, "0")}</span>
-              <div><strong>{title}</strong><small>{body}</small></div>
-              <span className="block-time">{time}</span>
-            </li>
-          ))}
-        </ol>
-        <div className="serve-note">
-          <Crosshair size={26} weight="duotone" aria-hidden="true" />
-          <div>
-            <strong>Serve work lives outside the machine clock.</strong>
-            <span>Add 10–15 focused minutes on three court days: form, depth, then power. Save overheads and out-ball judgment for partner feeds.</span>
-          </div>
-        </div>
-      </article>
+      <nav className="practice-formats" aria-label="Choose a drill-session format">
+        {practiceFormats.map(({ label, title, duration, body, href, icon: Icon }) => (
+          <a href={href} key={title}>
+            <div className="practice-format__top"><Icon size={25} weight="duotone" aria-hidden="true" /><span>{label}</span></div>
+            <h3>{title}</h3>
+            <strong>{duration}</strong>
+            <p>{body}</p>
+            <span className="practice-format__link">Open recipe <ArrowDown size={15} weight="bold" aria-hidden="true" /></span>
+          </a>
+        ))}
+      </nav>
+
+      <div className="session-recipes">
+        <DrillSessionGuide
+          id="standard-partner"
+          eyebrow="Weekly baseline"
+          title="Two-hour standard partner session"
+          description="Repeat this balanced session often enough to make the fundamentals automatic. The goal is broad upkeep, not rebuilding every shot in one day."
+          icon={UsersThree}
+          blocks={standardPartnerBlocks}
+          duration="120 minutes"
+          variant="partner"
+          note={{
+            title: "This is the default when no single weakness is urgent.",
+            body: "Keep feeds cooperative early, then make the final 40 minutes competitive and scored.",
+          }}
+        />
+
+        <DrillSessionGuide
+          id="focus-session"
+          eyebrow="Coaching + film response"
+          title="Focused shot-development session"
+          description="Pick one primary weakness from your latest lesson or video review. Build the mechanics, place the shot in a pattern, then test it under pressure."
+          icon={Crosshair}
+          blocks={focusBlocks}
+          duration="90–120 minutes"
+          variant="focus"
+          note={{
+            title: "One primary shot. One supporting variation.",
+            body: "For a 90-minute session, trim 15 minutes from mechanics and 15 from pattern integration—never skip the scored finish.",
+          }}
+        />
+
+        <DrillSessionGuide
+          id="ball-machine"
+          eyebrow="Weekly solo technical session"
+          title="Two-hour ball-machine session"
+          description="Use clean, repeatable feeds to build mechanics. Add movement and randomness only after contact quality holds."
+          icon={TennisBall}
+          blocks={machineBlocks}
+          duration="120 minutes"
+          variant="machine"
+          note={{
+            title: "Use the machine only where it helps.",
+            body: "Serve separately for 10–15 minutes on three court days. Save overheads and out-ball judgment for variable partner feeds.",
+          }}
+        />
+      </div>
+
+      <div className="drill-library-heading">
+        <p className="eyebrow">Drill library</p>
+        <h3>Pick the drill by the problem.</h3>
+        <p>These are the building blocks inside the session recipes. Open a card for the purpose, coaching cue and an evidence-based finish line.</p>
+      </div>
 
       <div className="priority-list">
         {priorityGuides.map((guide) => (
           <details key={guide.number}>
             <summary>
               <span>{guide.number}</span>
-              <div><h3>{guide.title}</h3><p>{guide.cue}</p></div>
+              <div><small>{guide.format}</small><h3>{guide.title}</h3><p>{guide.cue}</p></div>
               <CaretDown size={20} weight="bold" aria-hidden="true" />
             </summary>
             <div className="priority-detail">

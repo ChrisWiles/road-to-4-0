@@ -491,15 +491,101 @@ footer {
   background: var(--white);
 }
 
-.machine-guide {
+.practice-formats {
   display: grid;
-  margin-bottom: 50px;
+  margin: 0 0 64px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.practice-formats > a {
+  min-height: 255px;
+  padding: 25px;
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.practice-formats > a:hover,
+.practice-formats > a:focus-visible {
+  border-color: var(--coral);
+  transform: translateY(-3px);
+}
+
+.practice-format__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 31px;
+  color: var(--sage);
+}
+
+.practice-format__top span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.practice-formats h3 {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: clamp(24px, 2vw, 31px);
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.practice-formats > a > strong {
+  color: var(--coral-dark);
+  font-size: 12px;
+}
+
+.practice-formats > a > p {
+  margin: 15px 0 22px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.practice-format__link {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.session-recipes {
+  display: grid;
+  gap: 22px;
+}
+
+.session-guide {
+  display: grid;
   padding: clamp(26px, 3vw, 44px);
   border: 1px solid var(--rule);
   border-radius: 10px;
   background: var(--paper);
   grid-template-columns: minmax(250px, 0.72fr) minmax(420px, 1.28fr);
   gap: 48px;
+  scroll-margin-top: 96px;
+}
+
+.session-guide--partner {
+  border-top: 4px solid var(--coral);
+}
+
+.session-guide--focus {
+  border-top: 4px solid var(--sage);
+}
+
+.session-guide--machine {
+  border-top: 4px solid var(--ink);
 }
 
 .icon-frame {
@@ -513,11 +599,11 @@ footer {
   color: var(--sage);
 }
 
-.machine-guide__intro .eyebrow {
+.session-guide__intro .eyebrow {
   margin-bottom: 9px;
 }
 
-.machine-guide__intro h3 {
+.session-guide__intro h3 {
   margin: 0;
   font-family: var(--display);
   font-size: clamp(31px, 3vw, 46px);
@@ -525,14 +611,14 @@ footer {
   line-height: 1.05;
 }
 
-.machine-guide__intro > p:not(.eyebrow) {
+.session-guide__intro > p:not(.eyebrow) {
   max-width: 470px;
   margin: 17px 0 28px;
   color: var(--ink-soft);
   line-height: 1.7;
 }
 
-.machine-total {
+.session-total {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -541,18 +627,18 @@ footer {
   font-size: 13px;
 }
 
-.machine-total strong {
+.session-total strong {
   color: var(--coral);
   font-size: 18px;
 }
 
-.machine-blocks {
+.session-blocks {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.machine-blocks li {
+.session-blocks li {
   display: grid;
   align-items: center;
   padding: 12px 0;
@@ -567,17 +653,17 @@ footer {
   font-weight: 800;
 }
 
-.machine-blocks li div {
+.session-blocks li div {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.machine-blocks strong {
+.session-blocks strong {
   font-size: 13px;
 }
 
-.machine-blocks small {
+.session-blocks small {
   color: var(--ink-soft);
   font-size: 12px;
 }
@@ -589,7 +675,7 @@ footer {
   text-align: right;
 }
 
-.serve-note {
+.session-note {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -598,20 +684,39 @@ footer {
   grid-column: 1 / -1;
 }
 
-.serve-note div {
+.session-note div {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.serve-note strong {
+.session-note strong {
   color: var(--ink);
   font-size: 13px;
 }
 
-.serve-note span {
+.session-note span {
   color: var(--ink-soft);
   font-size: 12px;
+}
+
+.drill-library-heading {
+  max-width: 760px;
+  margin: 84px 0 30px;
+}
+
+.drill-library-heading h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(32px, 3vw, 45px);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.drill-library-heading > p:last-child {
+  margin: 16px 0 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
 }
 
 .priority-list {
@@ -655,6 +760,16 @@ footer {
 .priority-list summary h3,
 .priority-list summary p {
   margin: 0;
+}
+
+.priority-list summary small {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--sage);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .priority-list summary h3 {
@@ -1167,7 +1282,7 @@ footer a {
     border-left: 0;
   }
 
-  .machine-guide,
+  .session-guide,
   .film-layout,
   .progress-section,
   .tournament-grid {
@@ -1231,6 +1346,7 @@ footer a {
   }
 
   .training-block__grid,
+  .practice-formats,
   .priority-list,
   .proof-grid,
   .commandments ol {
@@ -1251,12 +1367,16 @@ footer a {
     border-right: 0;
   }
 
-  .machine-guide {
+  .practice-formats > a {
+    min-height: 0;
+  }
+
+  .session-guide {
     padding: 24px 18px;
     gap: 26px;
   }
 
-  .machine-blocks li {
+  .session-blocks li {
     grid-template-columns: 32px minmax(0, 1fr) 56px;
   }
 

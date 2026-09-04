@@ -16,3 +16,4 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Preserve the core line: “Reset better. Miss less. Attack smarter. Stay patient.”
 - Keep GitHub Pages unpublished until the user has reviewed and approved the local static site.
 - In the two-hour ball-machine guide, prioritize drives, resets, counters, forehand/backhand rolls, and backhand flicks; keep overhead and out-ball judgment work in partner sessions.
+- Keep the drill area organized as three clearly separated recipes: a repeatable two-hour standard partner session, a 90–120 minute focused shot-development session, and a two-hour ball-machine session, followed by a distinct drill library.
