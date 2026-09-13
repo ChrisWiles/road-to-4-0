@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { CoachingSection, TechniqueSection } from "./TechniqueSection";
 import {
   ArrowDown,
   ArrowRight,
@@ -27,9 +28,9 @@ import {
 const weekA = [
   {
     day: "Mon",
-    title: "Partner patterns",
+    title: "Kitchen advancement",
     duration: "90–120 min",
-    detail: "Third → fifth → seventh",
+    detail: "Hit · read · get up",
     extra: "Gym A · 35–50 min",
     icon: UsersThree,
   },
@@ -51,15 +52,15 @@ const weekA = [
     day: "Thu",
     title: "Ball machine",
     duration: "2 hours",
-    detail: "Drives · resets · rolls",
+    detail: "Drive spacing · resets · rolls",
     featured: true,
     icon: TennisBall,
   },
   {
     day: "Fri",
-    title: "Pressure drilling",
+    title: "Fourth-shot decisions",
     duration: "90–120 min",
-    detail: "Score it. Earn the attack.",
+    detail: "Keep back · dink · attack",
     extra: "Gym B · 35–50 min",
     icon: Gauge,
   },
@@ -93,8 +94,8 @@ const weekB = weekA.map((item) =>
 
 const machineBlocks = [
   ["Warm-up + calibration", "10 min", "Footwork, contact and clean feeds"],
-  ["Forehand drives", "20 min", "70–80% pace, topspin and margin"],
-  ["Backhand drives", "20 min", "Spacing, shape and repeatability"],
+  ["Forehand drives", "20 min", "50–60% pace; find comfortable contact spacing"],
+  ["Backhand drives", "20 min", "Separate results; stop reaching away from the strike zone"],
   ["Transition resets", "25 min", "Backhand bias; give soft balls lift"],
   ["Counters", "15 min", "Paddle up, compact and in front"],
   ["Forehand + backhand rolls", "15 min", "Topspin shape from attackable feeds"],
@@ -103,13 +104,13 @@ const machineBlocks = [
 ];
 
 const standardPartnerBlocks = [
-  ["Cooperative warm-up", "10 min", "Straight-on dinks, soft hands and clean contact"],
-  ["Straight-on dinking", "15 min", "Depth, inside-foot targets and 10-ball patience"],
-  ["Crosscourt dinking", "15 min", "Both diagonals; move the ball without forcing"],
-  ["Forehand kitchen work", "15 min", "Punch volleys, rolls and controlled putaways"],
-  ["Third-shot drive + drop", "25 min", "Read the third, then play the fifth and seventh"],
-  ["7/11", "25 min", "Baseline earns the kitchen; kitchen keeps them back"],
-  ["Pressure finish", "15 min", "Skinny singles or constrained points starting at 8–8"],
+  ["Deep serve + return", "15 min", "Back-third targets; record in, deep and shallow separately"],
+  ["Drive-spacing calibration", "15 min", "50–60% pace; 10 forehands, then 10 backhands"],
+  ["Random fourth-shot read", "20 min", "Call keep back, dink or attack before contact"],
+  ["Third → fifth → seventh", "30 min", "Advance only behind a ball that earns the step"],
+  ["Recentered defense", "20 min", "Recover and split before the opponent strikes"],
+  ["Wide-left escape", "10 min", "Middle reset, recover, then handle the next ball"],
+  ["Constrained points", "10 min", "Track kitchen arrival without abandoning the aggressive finish"],
 ];
 
 const focusBlocks = [
@@ -124,9 +125,9 @@ const focusBlocks = [
 const practiceFormats = [
   {
     label: "Format 01",
-    title: "Standard partner session",
+    title: "Current partner session",
     duration: "120 min",
-    body: "A balanced weekly tune-up for dinks, thirds, transition and pressure.",
+    body: "A coach-led session for kitchen arrival, fourth shots, drive spacing and defense.",
     href: "#standard-partner",
     icon: UsersThree,
   },
@@ -151,78 +152,99 @@ const practiceFormats = [
 const priorityGuides = [
   {
     number: "01",
-    title: "Transition + resets",
-    format: "Partner · machine",
-    cue: "Neutral is a win.",
-    body: "Build from uncomfortable positions without panicking. Split, reset, advance and repeat. On softer feeds, add enough lift instead of babying the ball into the net.",
-    test: "Score how often a transition attempt produces neutrality or forward progress.",
+    title: "Earn the kitchen",
+    format: "2–4 players · primary",
+    cue: "Hit. Read. Get up.",
+    body: "Build the full third-to-fifth-to-seventh sequence. Advance behind quality, split before contact and keep working until the serving team is established at the kitchen.",
+    test: "Raise serving-team kitchen arrival from the current one-match baseline of about 50% toward 80%+.",
   },
   {
     number: "02",
-    title: "Serve + drives",
-    format: "Solo · machine",
-    cue: "Shape first. Power second.",
-    body: "Build proper serve form and dependable forehand and backhand drives. Use 70–80% power, topspin, generous targets and balanced recovery.",
-    test: "Serve: 95% in and 80% deep. Drives: track target success at sustainable pace.",
+    title: "Fourth-shot decision",
+    format: "2–4 players · primary",
+    cue: "Read before you hit.",
+    body: "React to the incoming third instead of predetermining the fourth. Keep a low drive back, dink a good drop and attack only a genuinely high ball.",
+    test: "Tag the decision and execution separately; reduce fourth shots driven deep when the correct reply was into the kitchen.",
   },
   {
     number: "03",
-    title: "Paddle + counters",
-    format: "Partner · machine",
-    cue: "Up. Backhand-ready. In front.",
-    body: "Return to a backhand-biased ready position after every contact. Train compact counters to the right hip, chest and left shoulder with random placement.",
-    test: "Count clean neutral or offensive contacts before the first paddle-position breakdown.",
+    title: "Drive contact spacing",
+    format: "Solo · partner · machine",
+    cue: "Let it enter the strike zone.",
+    body: "The current coaching diagnosis is contact too far away from the comfortable strike zone, which lifts the ball. Calibrate at 50–60% pace before adding power.",
+    test: "Separate forehand and backhand results: controlled, high-and-attackable, net or long/wide.",
   },
   {
     number: "04",
-    title: "Third-shot movement",
-    format: "Partner pattern",
-    cue: "The third decides the feet.",
-    body: "Classify every third as good, neutral or bad. Advance on quality, hold on marginal balls, and stop or retreat with your partner behind a high third.",
-    test: "On video, tag movement decisions separately from shot-execution errors.",
+    title: "Recentered defense",
+    format: "2–4 players · primary",
+    cue: "Recover before they strike.",
+    body: "Stop pinching the middle without recovering. Move with your partner, restore court coverage and get balanced before the opponent contacts the next ball.",
+    test: "Count desperation shots caused by drifting, over-pinching or moving through contact.",
   },
   {
     number: "05",
-    title: "Keep them back",
-    format: "Partner · scored",
-    cue: "Attack the player coming forward.",
-    body: "When your team owns the kitchen, prioritize feet, depth and the advancing player. Make opponents earn every step through transition.",
-    test: "Play 7/11 and track how often the baseline team reaches the kitchen cleanly.",
+    title: "Serve + return depth",
+    format: "2–4 players · foundation",
+    cue: "Back third. Then move.",
+    body: "Accuracy is already good and shallow misses are rare. Keep that safety while moving more serves and returns from midcourt into the back third.",
+    test: "Track in, deep and shallow separately; work toward 80% deep for both serves and returns.",
   },
   {
     number: "06",
-    title: "Patience + attack choice",
-    format: "Partner · scored",
-    cue: "Earn the speedup.",
-    body: "Classify green, yellow and red balls. A red-ball attack loses the drill rally even when it happens to win the point.",
-    test: "Track bad decisions per game and attacks attempted from below net height.",
+    title: "Wide-left escape",
+    format: "2–4 players · supporting",
+    cue: "Buy time. Middle. Ready again.",
+    body: "When pulled wide to the backhand, avoid a desperation attack from the back foot. Send a high-margin dink to the middle, recover and handle the next ball.",
+    test: "Score 0 for miss/forced attack, 1 for made but attackable/no recovery, and 2 for neutral plus next-ball success.",
   },
   {
     number: "07",
-    title: "Left-side dink package",
-    format: "Partner",
-    cue: "Create pressure without rushing.",
-    body: "Build the crosscourt backhand slice first, then the two-handed topspin dink and balls taken out of the air. Follow a crosscourt dink by looking for a legitimate roll, flick or punch.",
-    test: "Complete 10-ball cooperative rallies, then score target accuracy and attack decisions separately.",
+    title: "Punch, block or leave",
+    format: "2–4 players · supporting",
+    cue: "Match the answer to the ball.",
+    body: "Punch a manageable volley, soften a low or jamming ball and leave a clearly long ball. Return to ready position for the next contact.",
+    test: "Score the decision separately from the result; do not reward a tactically wrong shot that happened to land.",
   },
   {
     number: "08",
-    title: "Overheads + out balls",
-    format: "Partner",
-    cue: "Control first. Judge early.",
-    body: "For overheads, turn sideways, contact high and recover for the next ball. For out-ball judgment, mix clearly in, borderline and clearly out feeds; call the ball before it passes.",
-    test: "Make 9 of 10 controlled overheads. Count every out ball touched as a lost drill point.",
+    title: "Preserve the weapons",
+    format: "2–4 players · maintenance",
+    cue: "Aggressive, not reckless.",
+    body: "Finishing, targeting, shot accuracy and aggressive play won the short rallies. Maintain those strengths while the transition game catches up.",
+    test: "In film, verify that improved kitchen progress does not reduce finishing quality or purposeful targeting.",
   },
 ];
 
 const scorecard = [
+  ["Kitchen arrival when serving", "80%+"],
   ["Serves in", "95%+"],
   ["Serves landing deep", "80%+"],
   ["Returns in", "95%+"],
-  ["Reasonably deep returns", "75%+"],
+  ["Returns landing deep", "80%+"],
+  ["Shallow serves + returns", "Near zero"],
   ["Red-ball attacks", "Near zero"],
-  ["Serve/return errors", "≤1 per game"],
 ];
+
+const groupDrills = {
+  2: [
+    ["Third → fifth → seventh", "30 min", "One player holds the kitchen while the server works forward. Advance only behind quality; split before every opponent contact.", "Track controlled kitchen arrivals out of 10."],
+    ["Random fourth-shot read", "20 min", "The baseline player mixes drives, drops and high balls. The kitchen player calls keep back, dink or attack before contact.", "Score decision and execution separately."],
+    ["Drive spacing + fifth", "20 min", "Feed 10 forehands and 10 backhands at 50–60% pace. Then volley the drive back so the hitter must play the fifth.", "Classify controlled, high, net and long/wide."],
+    ["Wide-left escape", "15 min", "Feed one normal dink, one wide-left backhand and one recovery ball. Reset middle; no attack from the back foot.", "Two points only for neutral plus next-ball success."],
+  ],
+  3: [
+    ["Two-up transition pressure", "20 min", "Two players hold the kitchen against one player working a half-court transition lane. Feed feet and middle; rotate after 10 rallies.", "Count neutral resets and balanced counters."],
+    ["Hitter · feeder · observer", "18 min", "One player drives, one feeds and one records spacing, trajectory and balance. Rotate roles every six minutes.", "Observer gives one pattern, not a new cue every ball."],
+    ["Fourth-shot triangle", "20 min", "One baseline player mixes third-shot drives and drops to two kitchen players. The receiver chooses the fourth while the partner recenters with them.", "Tag the read, placement and team movement."],
+  ],
+  4: [
+    ["First-four kitchen race", "25 min", "Play normal doubles from the serve. The serving team’s separate goal is to establish both players at the kitchen before the rally ends.", "Record kitchen arrival across 10 serving rallies."],
+    ["Fourth-shot decision doubles", "20 min", "Begin each rally with a mixed third shot. The receiving team chooses keep-back, dink or attack, then plays the point out.", "Review whether the fourth helped or hurt forward pressure."],
+    ["Wide-left + partner coverage", "20 min", "Create one deliberate wide dink. The stretched player resets middle while the partner protects space and both recover before the next ball.", "Pass only when the team handles the following shot."],
+    ["Constrained doubles", "20 min", "Play normally, but tag red-ball attacks, unrecovered pinches and movement through contact as decision errors.", "Keep the aggressive finish; remove the chaotic setup."],
+  ],
+};
 
 function WeekRow({ label, days }) {
   const headingId = `${label.toLowerCase().replace(" ", "-")}-heading`;
@@ -256,15 +278,33 @@ function WeekRow({ label, days }) {
 
 function AppHeader() {
   const [open, setOpen] = useState(false);
+  const headerRef = useRef(null);
+  const menuRef = useRef(null);
   const closeMenu = () => setOpen(false);
+  useEffect(() => {
+    if (!open) return;
+    const dismiss = (event) => {
+      if (event.type === "keydown" && event.key === "Escape") {
+        setOpen(false);
+        menuRef.current?.focus();
+      } else if (event.type === "pointerdown" && !headerRef.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("keydown", dismiss);
+    document.addEventListener("pointerdown", dismiss);
+    return () => {
+      document.removeEventListener("keydown", dismiss);
+      document.removeEventListener("pointerdown", dismiss);
+    };
+  }, [open]);
 
   return (
-    <header className="site-header">
+    <header className="site-header" ref={headerRef}>
       <a className="brand" href="#plan" aria-label="Road to 4.0 home">
         Road to 4.0
       </a>
       <button
         className="menu-button"
+        ref={menuRef}
         type="button"
         aria-expanded={open}
         aria-controls="primary-navigation"
@@ -275,6 +315,8 @@ function AppHeader() {
       <nav id="primary-navigation" className={open ? "nav nav--open" : "nav"} aria-label="Primary navigation">
         <a href="#plan" onClick={closeMenu}>Plan</a>
         <a href="#drills" onClick={closeMenu}>Drills</a>
+        <a href="#technique" onClick={closeMenu}>Technique</a>
+        <a href="#coaching" onClick={closeMenu}>Coaching</a>
         <a href="#film-room" onClick={closeMenu}>Film Room</a>
         <a href="#progress" onClick={closeMenu}>Progress</a>
         <a href="#tournament" onClick={closeMenu}>Tournament</a>
@@ -285,10 +327,10 @@ function AppHeader() {
 
 function TrainingBlock() {
   const items = [
-    [Repeat, "Primary focus", "Backhand transition resets", "Reset with height and depth from uncomfortable positions."],
-    [PersonSimpleRun, "Supporting focus", "Third → fifth → seventh", "Build the chain. Move up when the ball is short or neutral."],
-    [ArrowRight, "Maintenance", "Deep returns", "High margin and enough depth to earn time at the kitchen."],
-    [ShieldCheck, "Pressure behavior", "Neutralize rather than force", "Stay in the rally, then attack with a better ball."],
+    [PersonSimpleRun, "Primary focus", "Earn the kitchen", "Raise serving-team arrival from about 50% toward 80%. Hit, read, then get up."],
+    [Crosshair, "Decision focus", "Fourth-shot choice", "Keep back, dink or attack according to the incoming third."],
+    [Repeat, "Technique focus", "Drive contact spacing", "Stop reaching outside the comfortable strike zone. Begin at 50–60% pace."],
+    [ShieldCheck, "Defensive focus", "Recenter before contact", "Recover with your partner instead of pinching middle and staying displaced."],
   ];
 
   return (
@@ -308,6 +350,38 @@ function TrainingBlock() {
   );
 }
 
+function CoachSnapshot() {
+  const metrics = [
+    ["~50%", "Kitchen arrival", "One-match serving baseline"],
+    ["80%+", "Kitchen arrival", "Coach’s target"],
+    ["~⅓", "All-up kitchen rallies", "Longer points became less favorable"],
+    ["80%", "Deep serves + returns", "Next placement target"],
+  ];
+
+  return (
+    <section className="coach-snapshot" aria-labelledby="coach-snapshot-title">
+      <div className="coach-snapshot__intro">
+        <p className="eyebrow">Latest coach review · one-match snapshot</p>
+        <h2 id="coach-snapshot-title">The finish is working. Improve how often you get there.</h2>
+        <p>Aggression, targeting and finishing controlled the short rallies. Forward pressure, fourth-shot selection and organized recovery are the clearest opportunities.</p>
+      </div>
+      <div className="coach-snapshot__metrics">
+        {metrics.map(([value, label, note]) => (
+          <article key={`${value}-${label}`}>
+            <strong>{value}</strong>
+            <span>{label}</span>
+            <small>{note}</small>
+          </article>
+        ))}
+      </div>
+      <div className="coach-snapshot__takeaways">
+        <p><Check size={18} weight="bold" aria-hidden="true" /><span><strong>Protect:</strong> finishing ability, shot accuracy, targeting and aggressive identity.</span></p>
+        <p><ArrowRight size={18} weight="bold" aria-hidden="true" /><span><strong>Build next:</strong> kitchen progress, fourth-shot touch, drive spacing, recentering and depth.</span></p>
+      </div>
+    </section>
+  );
+}
+
 function PlanSection() {
   return (
     <section id="plan" className="plan-section">
@@ -315,8 +389,12 @@ function PlanSection() {
         <div className="hero__copy">
           <p className="eyebrow">Coach’s notebook</p>
           <h1>Reset better. Miss less.<br />Attack smarter. Stay patient.</h1>
+          <p className="hero-description">Your repeatable plan for a dependable 4.0 game.</p>
+          <div className="hero-shortcuts"><a href="#drills">Choose a session <ArrowRight size={16} aria-hidden="true" /></a><a href="#technique">Learn a shot</a><a href="#coaching">Plan a lesson</a></div>
         </div>
       </div>
+
+      <CoachSnapshot />
 
       <div className="plan-layout" id="cycle">
         <div className="cycle">
@@ -334,7 +412,7 @@ function PlanSection() {
         <aside className="coach-margin" aria-label="Coach's margin and recurring cadence">
           <div className="coach-note">
             <p>Coach’s margin</p>
-            <blockquote>Soft ball<br />still needs lift.</blockquote>
+            <blockquote>Hit. Read.<br />Get up.</blockquote>
           </div>
 
           <div className="cadence">
@@ -347,9 +425,10 @@ function PlanSection() {
           <div className="evidence">
             <p className="section-kicker">Monthly evidence</p>
             <p className="evidence__intro">Establish the baseline before claiming improvement.</p>
-            <div><span>Unforced errors</span><strong>Log</strong></div>
-            <div><span>Bad decisions</span><strong>Log</strong></div>
-            <div><span>Resets neutralized</span><strong>Log</strong></div>
+            <div><span>Kitchen arrival</span><strong>Log</strong></div>
+            <div><span>Fourth-shot choice</span><strong>Log</strong></div>
+            <div><span>High drives</span><strong>Log</strong></div>
+            <div><span>Recovered before contact</span><strong>Log</strong></div>
             <a className="text-link" href="#film-room">Open Film Room <ArrowRight size={16} aria-hidden="true" /></a>
           </div>
         </aside>
@@ -358,9 +437,9 @@ function PlanSection() {
   );
 }
 
-function DrillSessionGuide({ id, eyebrow, title, description, icon: Icon, blocks, duration, note, variant = "" }) {
+function DrillSessionGuide({ id, eyebrow, title, description, icon: Icon, blocks, duration, note, variant = "", hidden }) {
   return (
-    <article className={`session-guide ${variant ? `session-guide--${variant}` : ""}`} id={id}>
+    <article hidden={hidden} className={`session-guide ${variant ? `session-guide--${variant}` : ""}`} id={id}>
       <div className="session-guide__intro">
         <div className="icon-frame"><Icon size={34} weight="duotone" aria-hidden="true" /></div>
         <p className="eyebrow">{eyebrow}</p>
@@ -387,7 +466,51 @@ function DrillSessionGuide({ id, eyebrow, title, description, icon: Icon, blocks
   );
 }
 
+function GroupDrillLibrary() {
+  const [players, setPlayers] = useState(2);
+
+  return (
+    <section className="group-drills" aria-labelledby="group-drills-title">
+      <div className="group-drills__header">
+        <div>
+          <p className="eyebrow">Focused drill menu</p>
+          <h3 id="group-drills-title">How many players are on court?</h3>
+          <p>Two players is the default. Use the larger-group versions when the extra people improve feeding, observation or partner movement.</p>
+        </div>
+        <div className="player-count" role="group" aria-label="Choose total players">
+          {[2, 3, 4].map((count) => (
+            <button type="button" key={count} aria-pressed={players === count} onClick={() => setPlayers(count)}>
+              <strong>{count}</strong><span>{count === 2 ? "players · default" : "players"}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="group-drill-grid" aria-live="polite">
+        {groupDrills[players].map(([title, time, setup, measure], index) => (
+          <article key={title}>
+            <div className="group-drill-card__top"><span>{String(index + 1).padStart(2, "0")}</span><strong>{time}</strong></div>
+            <h4>{title}</h4>
+            <p>{setup}</p>
+            <div><Check size={17} weight="bold" aria-hidden="true" /><span><strong>Measure:</strong> {measure}</span></div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function DrillsSection() {
+  const [session, setSession] = useState(() => practiceFormats.some((format) => format.href === window.location.hash) ? window.location.hash : "#standard-partner");
+  useEffect(() => {
+    const reveal = () => {
+      if (practiceFormats.some((format) => format.href === window.location.hash)) setSession(window.location.hash);
+    };
+    window.addEventListener("hashchange", reveal);
+    return () => window.removeEventListener("hashchange", reveal);
+  }, []);
+  useEffect(() => {
+    if (window.location.hash === session) document.getElementById(session.slice(1))?.scrollIntoView();
+  }, [session]);
   return (
     <section id="drills" className="content-section drills-section">
       <div className="section-heading">
@@ -398,12 +521,12 @@ function DrillsSection() {
 
       <nav className="practice-formats" aria-label="Choose a drill-session format">
         {practiceFormats.map(({ label, title, duration, body, href, icon: Icon }) => (
-          <a href={href} key={title}>
+          <a href={href} key={title} aria-current={session === href ? "true" : undefined}>
             <div className="practice-format__top"><Icon size={25} weight="duotone" aria-hidden="true" /><span>{label}</span></div>
             <h3>{title}</h3>
             <strong>{duration}</strong>
             <p>{body}</p>
-            <span className="practice-format__link">Open recipe <ArrowDown size={15} weight="bold" aria-hidden="true" /></span>
+            <span className="practice-format__link">{session === href ? "Selected session" : "View session"} <ArrowDown size={15} weight="bold" aria-hidden="true" /></span>
           </a>
         ))}
       </nav>
@@ -411,21 +534,23 @@ function DrillsSection() {
       <div className="session-recipes">
         <DrillSessionGuide
           id="standard-partner"
+          hidden={session !== "#standard-partner"}
           eyebrow="Weekly baseline"
-          title="Two-hour standard partner session"
-          description="Repeat this balanced session often enough to make the fundamentals automatic. The goal is broad upkeep, not rebuilding every shot in one day."
+          title="Current two-hour partner session"
+          description="Use the latest coach review to turn this session into a direct response: earn the kitchen, improve the fourth, organize defense and lower the drives."
           icon={UsersThree}
           blocks={standardPartnerBlocks}
           duration="120 minutes"
           variant="partner"
           note={{
-            title: "This is the default when no single weakness is urgent.",
-            body: "Keep feeds cooperative early, then make the final 40 minutes competitive and scored.",
+            title: "Keep the aggressive identity that already works.",
+            body: "The purpose is to create more controlled finishing opportunities—not turn an attacking player passive.",
           }}
         />
 
         <DrillSessionGuide
           id="focus-session"
+          hidden={session !== "#focus-session"}
           eyebrow="Coaching + film response"
           title="Focused shot-development session"
           description="Pick one primary weakness from your latest lesson or video review. Build the mechanics, place the shot in a pattern, then test it under pressure."
@@ -441,6 +566,7 @@ function DrillsSection() {
 
         <DrillSessionGuide
           id="ball-machine"
+          hidden={session !== "#ball-machine"}
           eyebrow="Weekly solo technical session"
           title="Two-hour ball-machine session"
           description="Use clean, repeatable feeds to build mechanics. Add movement and randomness only after contact quality holds."
@@ -455,12 +581,15 @@ function DrillsSection() {
         />
       </div>
 
-      <div className="drill-library-heading">
-        <p className="eyebrow">Drill library</p>
-        <h3>Pick the drill by the problem.</h3>
-        <p>These are the building blocks inside the session recipes. Open a card for the purpose, coaching cue and an evidence-based finish line.</p>
+      <div className="drill-library-heading" id="patterns">
+        <p className="eyebrow">Patterns + decisions</p>
+        <h3>Pick the drill by the problem—and the people available.</h3>
+        <p>Start with a group-size plan below, then use the current-priority notes for cues and evidence. The <a href="#technique">shot workshop</a> holds step-by-step technique.</p>
       </div>
 
+      <GroupDrillLibrary />
+
+      <div className="priority-heading"><p className="eyebrow">Current priorities</p><h3>What each drill is trying to change.</h3></div>
       <div className="priority-list">
         {priorityGuides.map((guide) => (
           <details key={guide.number}>
@@ -608,12 +737,22 @@ function TournamentSection() {
 }
 
 export function App() {
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById(window.location.hash.slice(1));
+      if (target?.getClientRects().length) target.scrollIntoView();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
     <>
       <AppHeader />
       <main>
         <PlanSection />
         <DrillsSection />
+        <TechniqueSection />
+        <CoachingSection />
         <FilmRoomSection />
         <ProgressSection />
         <TournamentSection />

@@ -18,4 +18,9 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - In the two-hour ball-machine guide, prioritize drives, resets, counters, forehand/backhand rolls, and backhand flicks; keep overhead and out-ball judgment work in partner sessions.
 - Keep the drill area organized as three clearly separated recipes: a repeatable two-hour standard partner session, a 90–120 minute focused shot-development session, and a two-hour ball-machine session, followed by a distinct drill library.
 - Keep the phone layout free of horizontal page scrolling. At small widths, render each training week as a readable two-column grid, preserve large touch targets, and keep anchor headings clear of the sticky header.
-- Keep the opening hero text-only; do not restore a lead image unless the user explicitly requests one.
+- Keep the whole website free of photos and decorative images; use typography and existing functional icons.
+- Provide practical shot instructions and an every-two-weeks coaching agenda. Explicit priorities include punch volleys, backhand and forehand slice dinks, and wide-left backhand dinks followed by a middle reset and recovery.
+- Show one chosen session recipe at a time while preserving direct links to all three. Keep technique guides separately accessible from the primary navigation.
+- Treat the latest coach-reviewed match as a one-match snapshot, not a permanent identity. Preserve aggression, finishing, accuracy, and targeting as strengths while prioritizing serving-team kitchen arrival (about 50% toward 80%+), fourth-shot selection, organized recentering, drive contact spacing, and 80% deep serves/returns.
+- Organize focused drills by total player count: two players is the default; three-player sessions use an extra feeder or observer; four-player sessions add partner coverage and doubles movement.
+- For the current drive fault, use the coach's diagnosis that contact is too far outside the comfortable strike zone and lifts the ball. Start at 50–60% pace, score forehand and backhand separately, and avoid inventing new swing mechanics without coaching or footage.
